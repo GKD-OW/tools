@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Input, Select } from '@alifd/next';
+import { Form, Input, Select, NumberPicker } from '@alifd/next';
 const qrcode = require('../qrcode-terminal/lib/main');
 
 const FormItem = Form.Item;
@@ -22,7 +22,8 @@ export default class Home extends React.Component {
       white: " ",
       black: "▒",
       qrtext: "",
-      type: "text"
+      type: "text",
+      startNum: "0"
     };
   }
   gen() {
@@ -31,11 +32,12 @@ export default class Home extends React.Component {
       white: this.state.white
     }, qrtext => {
       let result = qrtext;
+      const num = parseInt(this.state.startNum);
       if (this.state.type === 'english') {
-        result = result.split("\n").map(it => `Create HUD Text(All Players(All Teams), Null, Custom String("${it}", Null, Null, Null), Null, Right, 50, Purple, Purple, Purple, Visible To and String, Default Visibility);`).join("\n");
+        result = result.split("\n").map((it, idx) => `Create HUD Text(All Players(All Teams), Null, Custom String("${it}", Null, Null, Null), Null, Right, ${idx + num}, Purple, Purple, Purple, Visible To and String, Default Visibility);`).join("\n");
       }
       if (this.state.type === 'chinese') {
-        result = result.split("\n").map(it => `创建HUD文本(所有玩家(所有队伍), 无, 自定义字符串("${it}", 无, 无, 无), 无, 右, 50, 紫色, 紫色, 紫色, 可见和字符串, 默认可见度);`).join("\n");
+        result = result.split("\n").map((it, idx) => `创建HUD文本(所有玩家(所有队伍), 无, 自定义字符串("${it}", 无, 无, 无), 无, 右, ${idx + num}, 紫色, 紫色, 紫色, 可见和字符串, 默认可见度);`).join("\n");
       }
       this.setState({ qrtext: result });
     });
@@ -62,6 +64,9 @@ export default class Home extends React.Component {
         </FormItem>
         <FormItem label="黑色文本">
           <Input name="black" />
+        </FormItem>
+        <FormItem label="起始序号">
+          <NumberPicker name="startNum" min={0} />
         </FormItem>
         <FormItem label="生成类型">
           <Select name="type" style={{ width: '100%' }}>
