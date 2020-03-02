@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - 'node'
+
+notifications:
+  email: false
+
+cache:
+  yarn: true
+
+before_install:
+  - export TZ="Asia/Shanghai"
+  - date
+
+install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH="$HOME/.yarn/bin:$PATH"
+
+script:
+  - bash ci/build.sh
+
+env:
+  global:
+    - secure: TKc47yk066XOFw6L1pz4CSN8ofmFCMnQVtnGrocX+/nT45U11CNTh3nHQwnxGNN2ziPjuXthgUDrfsZ7jgiuE5kVTugjZZFX5nePG/ik1Z+bBg1nwsUpnfiXngFMaJhRbK42GBGVdiQHrQwAqnrrT5JvEbtzH6bMfKSXzoUg0DWMz1Tb9udn7YXf932AG5XyjVrJrJl97HBeLhuCodAyGd1Z72R92JQfByNyDA0+b7baJ3+G3/KZYoNm+q7oDb6hyj9zpeKLImKIW/4tAd1MIPcJ9g9B5pbdYVEotw+G65caeqYi6M3Cc1VACWjbnfhp35NmZvSDRMI6KprkuQrM8hjkuqIRTKy0KFnhoy9i1c/lPcz0YPX0dgUMBtgMjYVcEtJJeD3kjxgJOUjc5+1FNse1Z9Yc6krxy4rv0gHeKTbmtL7trsgg37PyyDyTiFEvt0tA2QlkfM/ASj84PwYSGeHiVFbnQWEjdKjKFZgFYfojOlaOIwnKPEB/SJ1zfAH1rOxC5wWNPIk5alm4p6jrWAk+gRZp7v63Kwagc6Gb3AGDbwGYablO2De6k/plgmCthjcTGOAMwuMu0akZ9GAVe7V8W6UvKepyfpeXnomI+2WH72lG+VOuLFf0e3dzxP7gLHbCMgElUjgYiIw7hyiUc3BhkXVbmr/BxvsTrBYaMOA=
