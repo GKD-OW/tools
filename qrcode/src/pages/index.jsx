@@ -23,7 +23,7 @@ export default class Home extends React.Component {
       black: "▒",
       qrtext: "",
       type: "text",
-      startNum: "0"
+      startNum: 0
     };
   }
   gen() {
@@ -66,7 +66,7 @@ export default class Home extends React.Component {
           <Input name="black" />
         </FormItem>
         <FormItem label="起始序号">
-          <NumberPicker name="startNum" min={0} />
+          <NumberPicker name="startNum" type="inline" min={0} style={{ width: '100%' }} />
         </FormItem>
         <FormItem label="生成类型">
           <Select name="type" style={{ width: '100%' }}>
