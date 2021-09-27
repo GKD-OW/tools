@@ -1,0 +1,11 @@
+{
+  "externals": {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+    "@alifd/next": "window.Next",
+    "antd": "window.antd"
+  },
+  "plugins": [
+    "./webpack.plugin.js"
+  ]
+}

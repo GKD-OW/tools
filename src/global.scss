@@ -1,0 +1,24 @@
+// 引入默认全局样式
+@import '@alifd/next/reset.scss';
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+.basic-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+
+  .ant-menu {
+    width: 300px;
+  }
+
+  .layout-content {
+    box-sizing: border-box;
+    padding: 12px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: auto;
+  }
+}
