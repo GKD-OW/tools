@@ -1,4 +1,5 @@
 import BasicLayout from '@/layouts/Basic';
+import Frame from '@/pages/Frame';
 import Home from '@/pages/Home';
 import Micro from '@/pages/Micro';
 import list from './list';
@@ -11,6 +12,12 @@ list.forEach((item) => {
     children.push({
       path: `/${item.key}`,
       component: item.entry,
+    });
+  } else if (item.type === 'other') {
+    // iframe 嵌入
+    children.push({
+      path: `/${item.key}`,
+      component: Frame,
     });
   } else {
     // 微前端方案

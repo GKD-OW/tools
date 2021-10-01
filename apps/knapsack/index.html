@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>背包生成器（消耗品）</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+      #window {
+        width: 800px;
+        min-height: 500px;
+        margin: 0 auto;
+        padding: 50px 25px;
+        background-color: #ccc;
+        border-radius: 10px;
+        font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      h2 {
+        margin: 0;
+      }
+      hr {
+        height: 1px;
+        background-color: #aaa;
+        border: none;
+        z-index: 10;
+      }
+      .line {
+        margin: 5px 0;
+        position: relative;
+      }
+      .textCenter {
+        text-align: center;
+      }
+
+      input {
+        border: 0;
+        outline: none;
+      }
+      input[type="text"] {
+        font-size: 14px;
+      }
+      input[type="number"] {
+        width: 3em;
+      }
+      input[type="radio"] {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+      }
+      label {
+        border: 1px solid #345;
+        margin: 0 2px;
+      }
+      label:hover {
+        cursor: pointer;
+      }
+      input:checked + label {
+        background-color: #345;
+        color: #fff;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 0 1em;
+        color: #fff;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .button:active {
+        box-shadow: 1em 1em 1em 1em rgba(0, 0, 0, 0.1) inset;
+      }
+      .typeA {
+        line-height: 2em;
+        border-radius: 1em;
+      }
+      .typeB {
+        line-height: 1.5em;
+        border-radius: 0.75em;
+      }
+      .typeC {
+        line-height: 1em;
+        border-radius: 0.25em;
+        padding: 0 0.1em;
+      }
+      .bgcolorFB0 {
+        background-color: #fb0;
+      }
+      .bgcolor0BF {
+        background-color: #0bf;
+      }
+      .bgcolorF00 {
+        background-color: #f00;
+      }
+      .bgcolor345 {
+        background-color: #345;
+      }
+
+      #sponsor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 11;
+        color: #fff;
+      }
+      #sponsor:hover #sponsorDetails {
+        display: block;
+      }
+      #sponsorDetails {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px;
+        background-color: #345;
+        border-radius: 10px;
+      }
+      #sponsorDetails ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #sponsorDetails p {
+        margin: 0;
+        text-align: center;
+      }
+      #sponsorDetails img {
+        width: 15em;
+      }
+      #sponsorDetails a {
+        color: #0fb;
+      }
+
+      #chooseTable > tbody > tr > td:first-child {
+        width: 5.5em;
+      }
+      #indexTable {
+        border-collapse: collapse;
+      }
+      #indexTable td {
+        margin-left: 0;
+      }
+      .inputName {
+        text-align: center;
+        width: 8em;
+      }
+      .inputDetails {
+        text-indent: 0.5em;
+        width: 35em;
+      }
+
+      #preview {
+        resize: none;
+        white-space: nowrap;
+        overflow: scroll;
+        width: 100%;
+        height: 30em;
+        background-color: #aaa;
+        font-size: 16px;
+        color: #102233;
+        border: none;
+        padding: 0;
+        outline: none;
+      }
+      #preview::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background-color: rgba(0, 0, 0, 0);
+      }
+      #preview::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #102233;
+      }
+      #preview::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0);
+      }
+      #preview::-webkit-scrollbar-corner {
+        background-color: rgba(0, 0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="window">
+      <div class="line">
+        <h2>背包生成器（消耗品）</h2>
+        <div id="sponsor">
+          <div class="button typeA bgcolor345">赞 赏</div>
+          <div id="sponsorDetails">
+            <ul>
+              <li>
+                <p>微信</p>
+                <!-- <img src="https://img.sylibs.com/view/ef97ca5b8391110e6464ff25403bdfc7" alt="微信赞赏码"> -->
+                <img
+                  src="https://ae01.alicdn.com/kf/H522fcba49df8400e86202a4b6c3cbb8ay.jpg"
+                  alt="微信赞赏码"
+                />
+              </li>
+              <li>
+                <p>支付宝</p>
+                <!-- <img src="https://img.sylibs.com/view/9bbbc37a63ce877ed0ab570c1f422aad" alt="支付宝收钱码"> -->
+                <img
+                  src="https://ddcdn.jd.com/ddimg/jfs/t1/181532/2/11815/165134/60daf393E57b87592/e93cd7b13682fa9a.jpg"
+                  alt="支付宝收钱码"
+                />
+              </li>
+            </ul>
+            <p>感谢您的支持！</p>
+            <p>
+              <a
+                href="http://wpa.qq.com/msgrd?v=3&uin=1452916651&site=qq&menu=yes"
+                target="_blank"
+                rel="noopener noreferrer"
+                >联系作者</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="line">
+        <hr />
+      </div>
+      <div class="line">
+        <table id="chooseTable">
+          <tbody>
+            <tr>
+              <td><span>开启关闭：</span></td>
+              <td>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="shift"
+                  value="按钮被按下(事件玩家, 按钮(技能1))"
+                />
+                <label for="shift">技能一</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="e"
+                  value="按钮被按下(事件玩家, 按钮(技能2))"
+                />
+                <label for="e">技能二</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="q"
+                  value="按钮被按下(事件玩家, 按钮(终极技能))"
+                />
+                <label for="q">终极</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="v"
+                  value="按钮被按下(事件玩家, 按钮(互动))"
+                  checked
+                />
+                <label for="v">互动</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="r"
+                  value="按钮被按下(事件玩家, 按钮(装填))"
+                />
+                <label for="r">装填</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="f"
+                  value="按钮被按下(事件玩家, 按钮(近身攻击))"
+                />
+                <label for="f">近身攻击</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="space"
+                  value="按钮被按下(事件玩家, 按钮(跳跃))"
+                />
+                <label for="space">跳跃</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="ctrl"
+                  value="按钮被按下(事件玩家, 按钮(蹲下))"
+                />
+                <label for="ctrl">蹲下</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="hello"
+                  value="正在交流(事件玩家, 问候)"
+                />
+                <label for="hello">你好</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="c"
+                  value="正在使用表情交流(事件玩家)"
+                />
+                <label for="c">表情</label>
+                <input
+                  type="radio"
+                  name="dataSwitch"
+                  id="t"
+                  value="正在使用喷漆交流(事件玩家)"
+                />
+                <label for="t">喷漆</label>
+              </td>
+            </tr>
+            <tr>
+              <td><span>使用物品：</span></td>
+              <td>
+                <input
+                  type="radio"
+                  name="dataUseButton"
+                  id="useLeft"
+                  value="按钮被按下(事件玩家, 按钮(主要攻击模式))"
+                />
+                <label for="useLeft">左键</label>
+                <input
+                  type="radio"
+                  name="dataUseButton"
+                  id="useRight"
+                  value="按钮被按下(事件玩家, 按钮(辅助攻击模式))"
+                  checked
+                />
+                <label for="useRight">右键</label>
+              </td>
+            </tr>
+            <tr>
+              <td><span>HUD位置：</span></td>
+              <td>
+                <input
+                  type="radio"
+                  name="dataLocation"
+                  id="left"
+                  value="左边"
+                  checked
+                />
+                <label for="left">左边</label>
+                <input type="radio" name="dataLocation" id="top" value="顶部" />
+                <label for="top">顶部</label>
+                <input
+                  type="radio"
+                  name="dataLocation"
+                  id="right"
+                  value="右边"
+                />
+                <label for="right">右边</label>
+              </td>
+            </tr>
+            <tr>
+              <td><span>HUD颜色：</span></td>
+              <td>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="white"
+                  value="颜色(白色)"
+                />
+                <label for="white">白色</label>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="red"
+                  value="颜色(红色)"
+                />
+                <label for="red">红色</label>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="orange"
+                  value="颜色(橙色)"
+                  checked
+                />
+                <label for="orange">橙色</label>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="green"
+                  value="颜色(绿色)"
+                />
+                <label for="green">绿色</label>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="blue"
+                  value="颜色(蓝色)"
+                />
+                <label for="blue">蓝色</label>
+                <input
+                  type="radio"
+                  name="dataColor"
+                  id="roseRed"
+                  value="颜色(玫红)"
+                />
+                <label for="roseRed">玫红</label>
+              </td>
+            </tr>
+            <tr>
+              <td><span>HUD排序：</span></td>
+              <td>
+                <input
+                  id="dataSort"
+                  type="number"
+                  title="HUD文本的排序"
+                  value="0"
+                  oninput="correctionTo0(this)"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><span>变量索引：</span></td>
+              <td>
+                <table id="indexTable">
+                  <tr>
+                    <td>
+                      <input
+                        id="dataGlobalBackpack"
+                        type="number"
+                        title="全局.Backpack 的索引"
+                        value="0"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：全局.Backpack</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        id="dataPlayerBackpack"
+                        type="number"
+                        title="玩家.Backpack 的索引"
+                        value="0"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：玩家.Backpack</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        id="dataPlayerBackpackRelated"
+                        type="number"
+                        title="玩家.BackpackRelated 的索引"
+                        value="1"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：玩家.BackpackRelated</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        id="dataPlayerBackpackCache"
+                        type="number"
+                        title="玩家.BackpackCache 的索引"
+                        value="2"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：玩家.BackpackCache</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        id="dataSubAddToTheBackpack"
+                        type="number"
+                        title="子程序.AddToTheBackpack 的索引"
+                        value="0"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：子程序.AddToTheBackpack</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        id="dataSubUseInTheBackpack"
+                        type="number"
+                        title="子程序.UseInTheBackpack 的索引"
+                        value="1"
+                        oninput="correctionTo127(this)"
+                      />
+                    </td>
+                    <td><span>：子程序.UseInTheBackpack</span></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td><span>背包物品：</span></td>
+              <td>
+                <table id="backpackTable">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div
+                          class="button typeC bgcolorF00"
+                          onclick="removeFromBackpack(this)"
+                        >
+                          ✖
+                        </div>
+                      </td>
+                      <td>
+                        <input type="text" class="inputName" value="香烟" />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          class="inputDetails"
+                          value="使用效果：精神 +10，持续 60秒；生命值上限永久 -1。"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  class="button typeB bgcolor0BF"
+                  onclick="addToTheBackpack()"
+                >
+                  添加物品
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span>物品数量：</span></td>
+              <td>
+                <input
+                  id="dataIsCount"
+                  type="checkbox"
+                  title="是否统计并显示物品的数量"
+                  checked
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="line">
+        <div class="button typeA bgcolorFB0" onclick="generatePreview()">
+          生成预览
+        </div>
+      </div>
+      <div class="line">
+        <hr />
+      </div>
+      <div class="line">
+        <div class="textCenter">预 览</div>
+        <textarea id="preview"></textarea>
+      </div>
+      <div class="line">
+        <div class="button typeA bgcolorFB0" onclick="copyToClipboard()">
+          复制到剪贴板
+        </div>
+        <a
+          class="button typeA bgcolorFB0"
+          href="https://www.owmod.net/work/view/1331"
+          target="_blank"
+        >
+          作者：年迈的玩家
+        </a>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    console.log("背包生成器（消耗品） version 1.0 (C) 2021 Yu'an");
+
+    let dataSwitch, // 打开背包的按钮
+      dataSwitchAbb, // 打开背包的按钮简称
+      dataUseButton, // 使用物品的按钮
+      dataLocation, // HUD的位置
+      dataColor, // HUD的颜色
+      dataSort, // HUD的排序
+      dataGlobalBackpackIndex, // 全局.Backpack 的索引
+      dataPlayerBackpackIndex, // 事件玩家.Backpack 的索引
+      dataPlayerBackpackRelatedIndex, // 事件玩家.BackpackRelated 的索引
+      dataPlayerBackpackCacheIndex, // 事件玩家.BackpackCache 的索引
+      dataSubAddToTheBackpackIndex, // 子程序.SubAddToTheBackpack 的索引
+      dataSubUseInTheBackpackIndex, // 子程序.SubUseInTheBackpack 的索引
+      dataArticelArray = [], // 背包物品的数组
+      dataIsCount, // 是否统计物品的数量
+      dataGlobalBackpackRuleString = "", // 全局.Backpack 动作
+      dataSubUseRuleString = ""; // 子程序.SubUseInTheBackpack 动作
+    ruleString = ""; // 最终规则
+
+    // 数字校正
+    function correctionTo0(element) {
+      if (element.value == "") element.value = 0;
+    }
+
+    // 数字校正
+    function correctionTo127(element) {
+      if (element.value < 0 || element.value == "") element.value = 0;
+      if (element.value > 127) element.value = 127;
+    }
+
+    // 添加物品
+    function addToTheBackpack() {
+      let tr = document.createElement("tr");
+      tr.innerHTML = `<td><div class="button typeC bgcolorF00" onclick="removeFromBackpack(this)">✖</div></td>
+                                    <td><input type="text" class="inputName" value=""></td>
+                                    <td><input type="text" class="inputDetails" value=""></td>`;
+      document
+        .getElementById("backpackTable")
+        .firstElementChild.appendChild(tr);
+    }
+
+    // 移除物品
+    function removeFromBackpack(element) {
+      document
+        .getElementById("backpackTable")
+        .firstElementChild.removeChild(element.parentNode.parentNode);
+    }
+
+    // 生成预览
+    function generatePreview() {
+      (dataArticelArray = []), // 背包物品的数组
+        (dataGlobalBackpackRuleString = ""), // 全局.Backpack 动作
+        (dataSubUseRuleString = ""); // 子程序.SubUseInTheBackpack 动作
+      ruleString = ""; // 最终规则
+
+      // 获取参数
+      try {
+        document.getElementsByName("dataSwitch").forEach((e) => {
+          if (e.checked) {
+            dataSwitch = e.value;
+            dataSwitchAbb = e.nextElementSibling.innerText;
+          }
+        });
+        document.getElementsByName("dataUseButton").forEach((e) => {
+          if (e.checked) dataUseButton = e.value;
+        });
+        document.getElementsByName("dataLocation").forEach((e) => {
+          if (e.checked) dataLocation = e.value;
+        });
+        document.getElementsByName("dataColor").forEach((e) => {
+          if (e.checked) dataColor = e.value;
+        });
+        dataSort = document.getElementById("dataSort").value;
+        dataGlobalBackpackIndex = document.getElementById("dataGlobalBackpack")
+          .value;
+        dataPlayerBackpackIndex = document.getElementById("dataPlayerBackpack")
+          .value;
+        dataPlayerBackpackRelatedIndex = document.getElementById(
+          "dataPlayerBackpackRelated"
+        ).value;
+        dataPlayerBackpackCacheIndex = document.getElementById(
+          "dataPlayerBackpackCache"
+        ).value;
+        dataSubAddToTheBackpackIndex = document.getElementById(
+          "dataSubAddToTheBackpack"
+        ).value;
+        dataSubUseInTheBackpackIndex = document.getElementById(
+          "dataSubUseInTheBackpack"
+        ).value;
+        dataIsCount = document.getElementById("dataIsCount").checked;
+      } catch (error) {
+        pushMessage("error", `参数获取错误：${error}`);
+        console.log(error);
+        return;
+      }
+
+      // 获取背包物品
+      try {
+        [
+          ...document.getElementById("backpackTable").firstElementChild.children
+        ].forEach((e) => {
+          dataArticelArray.push(
+            new Array(
+              e.children[1].firstElementChild.value,
+              e.children[2].firstElementChild.value
+            )
+          );
+        });
+        if (dataArticelArray.length == 0) {
+          throw new Error("没有物品");
+        } else {
+          dataArticelArray.forEach((e) => {
+            if (e[0] == null || e[0].replace(/\s*/g, "") == "") {
+              console.log(dataArticelArray);
+              throw new Error("物品名称为空");
+            }
+          });
+        }
+      } catch (error) {
+        pushMessage("error", `背包物品获取错误：${error}`);
+        console.log(error);
+        return;
+      }
+
+      // 生成 全局.Backpack变量赋值 动作
+      try {
+        dataGlobalBackpackRuleString = `
+        全局.Backpack = 数组(`;
+        dataArticelArray.forEach((e) => {
+          dataGlobalBackpackRuleString += `
+                    字符串分割(自定义字符串("${e[0]}丨${e[1]}"), 自定义字符串("丨")),`;
+        });
+        dataGlobalBackpackRuleString = dataGlobalBackpackRuleString.slice(
+          0,
+          -1
+        );
+        dataGlobalBackpackRuleString += `
+                );`;
+      } catch (error) {
+        pushMessage("error", `生成 全局.Backpack变量赋值 动作 错误：${error}`);
+        console.log(error);
+        return;
+      }
+
+      // 生成 使用物品 动作
+      try {
+        dataArticelArray.forEach((e) => {
+          dataSubUseRuleString += `Else If(事件玩家.BackpackCache[0] == 自定义字符串("${e[0]}"));
+            小字体信息(事件玩家, 自定义字符串("使用了 ${e[0]}"));
+        `;
+        });
+        dataSubUseRuleString = dataSubUseRuleString.slice(5);
+        dataSubUseRuleString += `End;`;
+      } catch (error) {
+        pushMessage("error", `生成 使用物品 错误：${error}`);
+        console.log(error);
+        return;
+      }
+
+      // 生成规则
+      try {
+        ruleString = `变量
+{
+    全局:
+        ${dataGlobalBackpackIndex}: Backpack
+    玩家:
+        ${dataPlayerBackpackIndex}: Backpack
+        ${dataPlayerBackpackRelatedIndex}: BackpackRelated
+        ${dataPlayerBackpackCacheIndex}: BackpackCache
+}
+
+子程序
+{
+    ${dataSubAddToTheBackpackIndex}: AddToTheBackpack
+    ${dataSubUseInTheBackpackIndex}: UseInTheBackpack
+}
+                
+规则("全局初始化【背包生成器(消耗品) version 1.0 (C) 2021.06.30 Yu'an】")
+{
+    事件
+    {
+        持续 - 全局;
+    }
+    
+    动作
+    {
+        ${dataGlobalBackpackRuleString}
+        创建HUD文本(所有玩家(所有队伍), 
+            !本地玩家.BackpackRelated[0] ? 自定义字符串("背包丨${dataSwitchAbb}开关") : 
+                自定义字符串("背包丨${dataSwitchAbb}开关\\r\\n－－－－－－－\\r\\n{0}\\r\\n{1}\\r\\n{2}", 
+                    ${
+                      dataIsCount
+                        ? `自定义字符串("{0}\\r\\n{1}\\r\\n{2}",
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 0 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 0 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 0][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 0][2])),
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 1 ? 自定义字符串("☞") : 自定义字符串("　"),
+                            本地玩家.BackpackRelated[1] * 6 + 1 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 1][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 1][2])),
+                        自定义字符串("{0}{1}",
+                            本地玩家.BackpackRelated[2] == 2 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 2 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 2][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 2][2]))),
+                    自定义字符串("{0}\\r\\n{1}\\r\\n{2}", 
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 3 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 3 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 3][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 3][2])),
+                        自定义字符串("{0}{1}",
+                            本地玩家.BackpackRelated[2] == 4 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 4 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 4][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 4][2])),
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 5 ? 自定义字符串("☞") : 自定义字符串("　"),
+                            本地玩家.BackpackRelated[1] * 6 + 5 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                自定义字符串("{0}（{1}）", 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 5][0], 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 5][2]))),
+                    `
+                        : `自定义字符串("{0}\\r\\n{1}\\r\\n{2}",
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 0 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 0 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 0][0]),
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 1 ? 自定义字符串("☞") : 自定义字符串("　"),
+                            本地玩家.BackpackRelated[1] * 6 + 1 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 1][0]),
+                        自定义字符串("{0}{1}",
+                            本地玩家.BackpackRelated[2] == 2 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 2 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 2][0])),
+                    自定义字符串("{0}\\r\\n{1}\\r\\n{2}", 
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 3 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 3 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 3][0]),
+                        自定义字符串("{0}{1}",
+                            本地玩家.BackpackRelated[2] == 4 ? 自定义字符串("☞") : 自定义字符串("　"), 
+                            本地玩家.BackpackRelated[1] * 6 + 4 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 4][0]),
+                        自定义字符串("{0}{1}", 
+                            本地玩家.BackpackRelated[2] == 5 ? 自定义字符串("☞") : 自定义字符串("　"),
+                            本地玩家.BackpackRelated[1] * 6 + 5 >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 5][0])),`
+                    }
+                    自定义字符串("－－第{0}/{1}页－－",
+                        本地玩家.BackpackRelated[1] + 1, 
+                        取整(数量(本地玩家.Backpack) / 6, 下) + 1)), 
+            无, 无, ${dataLocation}, ${dataSort}, ${dataColor}, ${dataColor}, ${dataColor}, 可见和字符串, 默认可见度);
+        
+        创建HUD文本(本地玩家.BackpackRelated[0] ? 本地玩家 : 无, 
+            本地玩家.BackpackRelated[1] * 6 + 本地玩家.BackpackRelated[2] >= 数量(本地玩家.Backpack) ? 自定义字符串("") : 
+                自定义字符串("【{0}】{1}", 
+                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 本地玩家.BackpackRelated[2]][0], 
+                    本地玩家.Backpack[本地玩家.BackpackRelated[1] * 6 + 本地玩家.BackpackRelated[2]][1]),
+            无, 无, ${dataLocation}, ${
+          parseInt(dataSort) + 1
+        }, ${dataColor}, ${dataColor}, ${dataColor}, 可见和字符串, 默认可见度);
+    }
+}
+
+规则("玩家初始化【盘：https://share.weiyun.com/z6Vew7vw】")
+{
+    事件
+    {
+        玩家加入比赛;
+        双方;
+        全部;
+    }
+
+    动作
+    {
+        等待直到 (已重生(事件玩家), 5309);
+        事件玩家.Backpack = 空数组;
+        事件玩家.BackpackRelated = 数组(假, 0, 0);
+    }
+}
+
+规则("开/关 背包【年迈的玩家#5309】")
+{
+    事件
+    {
+        持续 - 每名玩家;
+        双方;
+        全部;
+    }
+
+    条件
+    {
+        ${dataSwitch} == 真;
+    }
+
+    动作
+    {
+        设置移动速度(事件玩家, 事件玩家.BackpackRelated[0] ? 100 : 0);
+        设置主要攻击模式启用(事件玩家, 事件玩家.BackpackRelated[0]);
+        设置辅助攻击模式启用(事件玩家, 事件玩家.BackpackRelated[0]);
+        事件玩家.BackpackRelated[0] = !事件玩家.BackpackRelated[0];
+    }
+}
+
+规则("操作背包")
+{
+    事件
+    {
+        持续 - 每名玩家;
+        双方;
+        全部;
+    }
+
+    条件
+    {
+        事件玩家.BackpackRelated[0] == 真;
+        (${dataUseButton} ||  阈值(事件玩家) != 矢量(0, 0, 0)) == 真;
+    }
+
+    动作
+    {
+        If(${dataUseButton} && 事件玩家.BackpackRelated[1] * 6 + 事件玩家.BackpackRelated[2] < 数量(事件玩家.Backpack));
+            事件玩家.BackpackCache = 事件玩家.Backpack[事件玩家.BackpackRelated[1] * 6 + 事件玩家.BackpackRelated[2]];
+            ${
+              dataIsCount
+                ? `If(事件玩家.BackpackCache != 0 && 事件玩家.BackpackCache[2] > 0);
+                事件玩家.BackpackCache[2] -= 1;`
+                : `If(事件玩家.BackpackCache != 0);`
+            }
+                调用子程序(UseInTheBackpack);
+                ${
+                  dataIsCount
+                    ? `If(事件玩家.BackpackCache[2] == 0);
+                    修改玩家变量(事件玩家, Backpack, 根据索引从数组中移除, 事件玩家.BackpackRelated[1] * 6 + 事件玩家.BackpackRelated[2]);
+                Else;
+                    事件玩家.Backpack[事件玩家.BackpackRelated[1] * 6 + 事件玩家.BackpackRelated[2]] = 事件玩家.BackpackCache;
+                End;`
+                    : `修改玩家变量(事件玩家, Backpack, 根据索引从数组中移除, 事件玩家.BackpackRelated[1] * 6 + 事件玩家.BackpackRelated[2]);`
+                }
+            End;
+        End;
+        While(阈值(事件玩家) == 前);
+            If(事件玩家.BackpackRelated[2] > 0);
+                事件玩家.BackpackRelated[2] -= 1;
+            Else If(事件玩家.BackpackRelated[1] > 0);
+                事件玩家.BackpackRelated[1] -= 1;
+                事件玩家.BackpackRelated[2] = 5;
+            End;
+            等待(0.150, 当为“假”时中止);
+        End;
+        While(阈值(事件玩家) == 后);
+            If(事件玩家.BackpackRelated[2] < 5);
+                事件玩家.BackpackRelated[2] += 1;
+            Else If(事件玩家.BackpackRelated[1] < 取整(数量(事件玩家.Backpack) / 6, 下));
+                事件玩家.BackpackRelated[1] += 1;
+                事件玩家.BackpackRelated[2] = 0;
+            End;
+            等待(0.150, 当为“假”时中止);
+        End;
+        While(阈值(事件玩家) == 左 && 事件玩家.BackpackRelated[1] > 0);
+            事件玩家.BackpackRelated[1] -= 1;
+            等待(0.250, 当为“假”时中止);
+        End;
+        While(阈值(事件玩家) == 右 && 事件玩家.BackpackRelated[1] < 取整(数量(事件玩家.Backpack) / 6, 下));
+            事件玩家.BackpackRelated[1] += 1;
+            等待(0.250, 当为“假”时中止);
+        End;
+    }
+}
+
+规则("【子程序】添加物品")
+{
+    事件
+    {
+        子程序;
+        AddToTheBackpack;
+    }
+
+    动作
+    {
+        事件玩家.BackpackCache = 数组值的索引(映射的数组(全局.Backpack, 当前数组元素[0]), 事件玩家.BackpackCache);
+        If(事件玩家.BackpackCache == -1);
+            小字体信息(事件玩家, 自定义字符串("添加失败，请检查物品名称"));
+        Else;
+            ${
+              dataIsCount
+                ? `事件玩家.BackpackCache = 全局.Backpack[事件玩家.BackpackCache];
+            事件玩家.BackpackRelated[3] = 数组值的索引(映射的数组(事件玩家.Backpack, 当前数组元素[0]), 事件玩家.BackpackCache[0]);
+            If(事件玩家.BackpackRelated[3] == -1);
+                事件玩家.Backpack[数量(事件玩家.Backpack)] = 添加至数组(事件玩家.BackpackCache, 1);
+            Else;
+                事件玩家.BackpackCache = 事件玩家.Backpack[事件玩家.BackpackRelated[3]];
+                事件玩家.BackpackCache[2] += 1;
+                事件玩家.Backpack[事件玩家.BackpackRelated[3]] = 事件玩家.BackpackCache;
+            End;`
+                : `事件玩家.Backpack[数量(事件玩家.Backpack)] = 全局.Backpack[事件玩家.BackpackCache];`
+            }
+        End;
+    }
+}
+
+规则("【子程序】使用物品")
+{
+    事件
+    {
+        子程序;
+        UseInTheBackpack;
+    }
+
+    动作
+    {
+        ${dataSubUseRuleString}
+    }
+}`;
+        document.getElementById("preview").value = ruleString;
+        pushMessage(
+          "success",
+          `当前预览内容约 ${
+            (dataIsCount ? 1089 : 858) + dataArticelArray.length * 29
+          } 元素`
+        );
+      } catch (error) {
+        pushMessage("error", `生成规则错误：${error}`);
+        console.log(error);
+        return;
+      }
+    }
+
+    // 复制到剪贴板
+    function copyToClipboard() {
+      document.getElementById("preview").select();
+      document.execCommand("copy")
+        ? pushMessage("success", `已复制`)
+        : pushMessage("failure", "复制失败");
+      window.getSelection().empty();
+    }
+  </script>
+  <script type="text/javascript">
+    /*!
+     * pushMessage.js v1.0
+     * (C) 2020 Yu'an
+     */
+    let messageBox;
+    const colorMap = {
+      success: "#0bf",
+      failure: "#f00",
+      warning: "#fb0",
+      error: "#000",
+      成功: "#0bf",
+      失败: "#f00",
+      警告: "#fb0",
+      错误: "#000"
+    };
+    const liStyleString =
+      "display: block; margin: 0.5rem 0; padding: 0 3rem; color: #fff; font-size: 1rem; line-height: 2rem; border-radius: 5px; transition: opacity 1s;";
+
+    /**
+     * 初始化
+     * 添加 消息框
+     */
+    function init() {
+      // 新建 ul 元素
+      messageBox = document.createElement("ul");
+      // 为 messageBox 的 id 赋值
+      messageBox.id = "messageBox";
+      messageBox.style =
+        "list-style-type: none; position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); padding-left: 0; min-width: 8rem; text-align: center; z-index: 100;";
+      // 将 messageBox 添加到 body 中
+      document.body.appendChild(messageBox);
+    }
+
+    init();
+
+    /**
+     * 推送消息
+     * @param {string} status 消息状态(success, failure, warning, error)
+     * @param {string} message 消息内容
+     */
+    function pushMessage(status, message) {
+      // 检查 消息状态参数 是否包含于 colorMap 中
+      if (colorMap.hasOwnProperty(status)) {
+        // 新建 li 元素
+        let li = document.createElement("li");
+        // 设置 style
+        li.style = liStyleString;
+        // 设置 背景颜色
+        li.style.backgroundColor = colorMap[status];
+        // 设置 消息内容
+        li.innerText = message;
+        // 插入消息
+        messageBox.insertBefore(li, messageBox.children[0]);
+        // 3s 后逐渐透明，再 1s 后移除
+        setTimeout(function () {
+          // 透明
+          li.style.opacity = "0";
+          setTimeout(function () {
+            // 移除
+            messageBox.removeChild(li);
+          }, 1000);
+        }, 3000);
+      } else {
+        pushMessage("error", "参数错误！");
+      }
+    }
+  </script>
+</html>

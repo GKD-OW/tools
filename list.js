@@ -4,6 +4,10 @@ const App = {
     type: 'react',
     entry: 'index.jsx',
   },
+  knapsack: {
+    title: '背包生成器',
+    type: 'other',
+  },
   docs: {
     title: '开发文档',
     type: 'other',
